@@ -1,0 +1,105 @@
+Peer Assessment 1
+========================
+
+This assignment makes use of data from a personal activity monitoring device. This device collects data at 5 minute intervals through out the day. The data consists of two months of data from an anonymous individual collected during the months of October and November, 2012 and include the number of steps taken in 5 minute intervals each day.
+
+
+## Loading and preprocessing the data
+
+
+* read csv
+
+```{r}
+mydata = read.csv("activity.csv") 
+```
+
+* create data frame with na
+
+```{r}
+df_na <- data.frame(mydata)
+df_na$date <- as.Date(df_na$date)
+summary(df_na)
+```
+
+* create data frame without na
+
+```{r}
+df <- data.frame(df_na[complete.cases(df_na), ])
+summary(df)
+```
+
+* create data table
+
+```{r}
+library(data.table)
+dt <- data.table(df)
+```
+
+
+* calculate total number steps per day, mean, median
+
+```{r}
+dt_steps <- dt[,sum(steps),by = date]
+mean(dt_steps$V1)
+median(dt_steps$V1)
+hist(dt_steps$V1, breaks = 53, main="Histogram - Total Step per Day")
+```
+
+
+## What is the average daily activity pattern?
+
+
+* plot of mean steps against intervals
+
+```{r}
+plot( dt[,mean(steps),by = interval]$interval,dt[,mean(steps),by = interval]$V1,type = "l")
+max(dt[,mean(steps),by = interval]$V1)
+```
+
+
+* find length of data frames
+
+```{r}
+str(df_na)
+str(df)
+```
+
+
+## Imputing missing values
+
+
+* calculate mean values per interval to replace na
+
+```{r}
+dt_mean_interval <- dt[,mean(steps),by = interval]
+df_filled <- df_na
+df_filled[is.na(df_filled$steps) , ]$steps <- dt_mean_interval$V1
+str(df_filled)
+```
+
+* histogram for na data filled, total steps per day
+
+```{r}
+dt_filled <- data.table(df_filled)
+dt_filled_steps <- dt_filled[,sum(steps),by = date]
+hist(dt_filled_steps$V1, breaks = 61, main="Histogram (na filled)- Total Step per Day")
+```
+
+
+## Are there differences in activity patterns between weekdays and weekends?
+
+
+* weekdays
+
+```{r}
+dt_na2_weekdays <- data.table(dt_filled[weekdays(as.Date(dt_filled$date)) %in%  c("Monday","Tuesday","Wednesday","Thursday","Friday")])
+plot( dt_na2_weekdays[,mean(steps),by = interval]$interval,dt_na2_weekdays[,mean(steps),by = interval]$V1,type = "l")
+```
+
+
+* weekends
+
+```{r}
+dt_na2_weekends <- data.table(dt_filled[weekdays(as.Date(dt_filled$date)) %in%  c("Sunday","Saturday")])
+plot( dt_na2_weekends[,mean(steps),by = interval]$interval,dt_na2_weekends[,mean(steps),by = interval]$V1,type = "l")
+```
