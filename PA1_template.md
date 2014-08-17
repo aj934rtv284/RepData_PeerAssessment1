@@ -66,13 +66,6 @@ str(df)
 
 ```r
 library(data.table)
-```
-
-```
-## data.table 1.9.2  For help type: help("data.table")
-```
-
-```r
 dt <- data.table(df)
 str(dt)
 ```
