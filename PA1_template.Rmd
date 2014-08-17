@@ -16,7 +16,9 @@ This assignment makes use of data from a personal activity monitoring device. Th
 ```{r}
 mydata = read.csv("activity.csv") 
 ```
-
+* The data set includes 17,568 records and three variables.
+* The Steps and Interval variables will be numeric.
+* The Date field will be treated as a data value YYYY-MM-DD format.
 
 
 * Next create the data frame with NA rows.
@@ -24,7 +26,7 @@ mydata = read.csv("activity.csv")
 ```{r}
 df_na <- data.frame(mydata)
 df_na$date <- as.Date(df_na$date)
-str(df_na)
+summary(df_na)
 ```
 
 
@@ -33,7 +35,7 @@ str(df_na)
 
 ```{r}
 df <- data.frame(df_na[complete.cases(df_na), ])
-summary(df)
+str(df)
 ```
 
 
@@ -43,6 +45,7 @@ summary(df)
 ```{r}
 library(data.table)
 dt <- data.table(df)
+str(dt)
 ```
 
 

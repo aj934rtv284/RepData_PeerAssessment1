@@ -17,7 +17,9 @@ This assignment makes use of data from a personal activity monitoring device. Th
 ```r
 mydata = read.csv("activity.csv") 
 ```
-
+* The data set includes 17,568 records and three variables.
+* The Steps and Interval variables will be numeric.
+* The Date field will be treated as a data value YYYY-MM-DD format.
 
 
 * Next create the data frame with NA rows.
@@ -26,14 +28,18 @@ mydata = read.csv("activity.csv")
 ```r
 df_na <- data.frame(mydata)
 df_na$date <- as.Date(df_na$date)
-str(df_na)
+summary(df_na)
 ```
 
 ```
-## 'data.frame':	17568 obs. of  3 variables:
-##  $ steps   : int  NA NA NA NA NA NA NA NA NA NA ...
-##  $ date    : Date, format: "2012-10-01" "2012-10-01" ...
-##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+##      steps            date               interval   
+##  Min.   :  0.0   Min.   :2012-10-01   Min.   :   0  
+##  1st Qu.:  0.0   1st Qu.:2012-10-16   1st Qu.: 589  
+##  Median :  0.0   Median :2012-10-31   Median :1178  
+##  Mean   : 37.4   Mean   :2012-10-31   Mean   :1178  
+##  3rd Qu.: 12.0   3rd Qu.:2012-11-15   3rd Qu.:1766  
+##  Max.   :806.0   Max.   :2012-11-30   Max.   :2355  
+##  NA's   :2304
 ```
 
 
@@ -43,17 +49,14 @@ str(df_na)
 
 ```r
 df <- data.frame(df_na[complete.cases(df_na), ])
-summary(df)
+str(df)
 ```
 
 ```
-##      steps            date               interval   
-##  Min.   :  0.0   Min.   :2012-10-02   Min.   :   0  
-##  1st Qu.:  0.0   1st Qu.:2012-10-16   1st Qu.: 589  
-##  Median :  0.0   Median :2012-10-29   Median :1178  
-##  Mean   : 37.4   Mean   :2012-10-30   Mean   :1178  
-##  3rd Qu.: 12.0   3rd Qu.:2012-11-16   3rd Qu.:1766  
-##  Max.   :806.0   Max.   :2012-11-29   Max.   :2355
+## 'data.frame':	15264 obs. of  3 variables:
+##  $ steps   : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ date    : Date, format: "2012-10-02" "2012-10-02" ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
 ```
 
 
@@ -63,7 +66,23 @@ summary(df)
 
 ```r
 library(data.table)
+```
+
+```
+## data.table 1.9.2  For help type: help("data.table")
+```
+
+```r
 dt <- data.table(df)
+str(dt)
+```
+
+```
+## Classes 'data.table' and 'data.frame':	15264 obs. of  3 variables:
+##  $ steps   : int  0 0 0 0 0 0 0 0 0 0 ...
+##  $ date    : Date, format: "2012-10-02" "2012-10-02" ...
+##  $ interval: int  0 5 10 15 20 25 30 35 40 45 ...
+##  - attr(*, ".internal.selfref")=<externalptr>
 ```
 
 
